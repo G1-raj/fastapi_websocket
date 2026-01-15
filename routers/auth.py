@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from db.database import get_db
 from models import models
-from schemas.auth import UserCreate, UserLogin, UserResponse
+from schemas.auth import UserCreate, UserLogin, SignUpRespone, LoginResponse
 from utils.security import get_password, verify_password
 from utils.jwt import create_access_token, create_refresh_token
 
 router = APIRouter(prefix="/auth", tags=["auth", "signup", "login"])
 
-@router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/signup", response_model=SignUpRespone, status_code=status.HTTP_201_CREATED)
 def signup(user: UserCreate, db: Session = Depends(get_db)):
     
     existing_user = db.query(models.User).filter(user.email == models.User.email).first()
@@ -36,7 +36,7 @@ def signup(user: UserCreate, db: Session = Depends(get_db)):
         "data": new_user
     }
 
-@router.post("/login", response_model=UserResponse, status_code=status.HTTP_200_OK)
+@router.post("/login", response_model=LoginResponse, status_code=status.HTTP_200_OK)
 def login(user: UserLogin, db: Session = Depends(get_db)):
 
     existing_user = db.query(models.User).filter(models.User.email == user.email).first()
