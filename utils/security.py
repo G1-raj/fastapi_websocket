@@ -6,7 +6,6 @@ pwd_context = CryptContext(
 )
 
 def get_password(password: str) -> str:
-    password = password.strip()
     return pwd_context.hash(password)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
