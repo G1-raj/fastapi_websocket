@@ -3,9 +3,9 @@ from core.websocket_manager import ConnectionManager
 from services.jwt import verify_jwt
 
 manager = ConnectionManager()
-app = APIRouter()
+router = APIRouter()
 
-@app.websocket("/ws/chat")
+@router.websocket("/ws/chat")
 async def chat_ws(websocket: WebSocket, token: str = Query(...)):
     user_id = verify_jwt(token)
     if not user_id:
@@ -21,5 +21,5 @@ async def chat_ws(websocket: WebSocket, token: str = Query(...)):
                 "sender": user_id,
                 "text": data["text"]
             })
-    except:
+    except WebSocketDisconnect:
         manager.disconnect(user_id)
