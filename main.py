@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from db.database import engine, Base
-from routers import auth
+from routers import auth, chat
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -18,3 +18,4 @@ app.add_middleware(
 Base.metadata.create_all(bind=engine)
 
 app.include_router(auth.router)
+app.include_router(chat.app)
